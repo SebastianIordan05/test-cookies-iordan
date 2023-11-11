@@ -1,41 +1,30 @@
+// Load data from local storage when the page loads
 window.onload = function() {
-    var formData = getCookie('formData');
+    var formData = localStorage.getItem('formData');
     if (formData) {
-        formData = JSON.parse(decodeURIComponent(formData));
+        // If there is saved data in local storage, restore the values in the form fields
+        formData = JSON.parse(formData);
         document.getElementById('name').value = formData.name;
         document.getElementById('email').value = formData.email;
         document.getElementById('age').value = formData.age;
     }
 };
 
+// Function to save data in local storage
 function saveData() {
     var name = document.getElementById('name').value;
     var email = document.getElementById('email').value;
     var age = document.getElementById('age').value;
 
+    // Create a data object
     var data = {
         name: name,
         email: email,
         age: age
     };
 
-    var jsonData = JSON.stringify(data);
+    // Convert the data object into a JSON string and save it to local storage
+    localStorage.setItem('formData', JSON.stringify(data));
 
-    var expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 7);
-
-    document.cookie = 'formData=' + encodeURIComponent(jsonData) + '; expires=' + expirationDate.toUTCString() + '; path=/';
-
-    alert('Dati salvati nei cookie per una settimana!');
-}
-
-function getCookie(name) {
-    var cookieArr = document.cookie.split(';');
-    for (var i = 0; i < cookieArr.length; i++) {
-        var cookiePair = cookieArr[i].split('=');
-        if (name === cookiePair[0].trim()) {
-            return cookiePair[1];
-        }
-    }
-    return null;
+    alert('Data saved in local storage!');
 }
